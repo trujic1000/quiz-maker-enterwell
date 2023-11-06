@@ -1,7 +1,8 @@
+"use client";
+
 import React, { type ForwardedRef } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
-
 import { twMerge } from "tailwind-merge";
 
 type DialogContentProps = {

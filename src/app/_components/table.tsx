@@ -189,7 +189,7 @@ export function Table<T extends object>({
                       <td
                         key={cell.id}
                         className={clsx(
-                          "text-xxs px-6 py-2 font-sans leading-loose",
+                          "px-6 py-2 font-sans text-xs leading-loose",
                         )}
                       >
                         {flexRender(

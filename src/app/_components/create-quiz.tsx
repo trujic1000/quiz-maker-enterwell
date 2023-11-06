@@ -1,43 +1,68 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React from "react";
+import { useForm, useFieldArray } from "react-hook-form";
 
 import { api } from "~/trpc/react";
+import { Dialog, DialogTrigger, DialogContent } from "./dialog";
+import { Input } from "./input";
+
+type Question = {
+  title: string;
+  answer: string;
+};
+
+type FormValues = {
+  title: string;
+  // questions: Question[];
+};
 
 export function CreateQuiz() {
-  const router = useRouter();
-  const [title, setTitle] = useState("");
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const { control, watch, handleSubmit, reset, register } =
+    useForm<FormValues>();
+  // const { append, fields, remove } = useFieldArray({ control, name: "questions" });
 
-  const createPost = api.quiz.create.useMutation({
+  const createQuiz = api.quiz.create.useMutation({
     onSuccess: () => {
-      router.refresh();
-      setTitle("");
+      console.log("Success!!");
     },
   });
 
+  const onSubmit = handleSubmit(({ title }) => {
+    createQuiz.mutate({ title });
+  });
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createPost.mutate({ title });
-      }}
-      className="flex flex-col gap-2"
-    >
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
-      >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
-      </button>
-    </form>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        >
+          Create new quiz
+        </button>
+      </DialogTrigger>
+      <DialogContent title="Add new quiz">
+        <form
+          className="grid gap-10 bg-white p-10 text-black"
+          onSubmit={onSubmit}
+        >
+          <Input
+            register={register}
+            name="title"
+            label="Quiz title"
+            placeholder="Enter quiz title"
+            required
+          />
+          <button
+            type="submit"
+            className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            disabled={createQuiz.isLoading}
+          >
+            {createQuiz.isLoading ? "Submitting..." : "Submit"}
+          </button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -3,8 +3,14 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Table } from "./table";
 import { Quiz } from "../page";
+import { api } from "~/trpc/react";
 
 const columns: ColumnDef<Quiz>[] = [
+  // {
+  //   accessorKey: "id",
+  //   header: "ID",
+  //   cell: (ctx) => ctx.getValue(),
+  // },
   {
     accessorKey: "title",
     header: "Title",
@@ -22,45 +28,20 @@ const columns: ColumnDef<Quiz>[] = [
 ];
 
 export const QuizTable = () => {
-  const data = [
-    {
-      id: "1",
-      title: "John Doe",
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      questions: [
-        {
-          id: "1",
-          title: "Who dis?",
-          answer: "John Doe",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          quizId: "1",
-        },
-      ],
-    },
-    {
-      id: "2",
-      title: "Jane Doe",
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      questions: [],
-    },
-    {
-      id: "3",
-      title: "Mark Doe",
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      questions: [],
-    },
-  ];
+  const { data, isLoading, error } = api.quiz.getAll.useQuery();
 
-  if (data.length === 0) {
+  if (error) {
+    console.error(`Something went wrong. Error message: ${error.message}`);
+    return <div>Something went wrong</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data || data.length === 0) {
     return (
-      <div>
+      <div className="text-center">
         <p>No quizes available</p>
         <button
           type="button"

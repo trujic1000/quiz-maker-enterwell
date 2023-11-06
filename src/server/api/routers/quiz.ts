@@ -23,7 +23,12 @@ export const quizRouter = createTRPCRouter({
     }),
 
   getAll: publicProcedure.query(({ ctx }) =>
-    ctx.db.quiz.findMany({ where: { isActive: true } }),
+    ctx.db.quiz.findMany({
+      where: { isActive: true },
+      include: {
+        questions: true,
+      },
+    }),
   ),
 
   getById: publicProcedure
@@ -33,7 +38,10 @@ export const quizRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input }) =>
-      ctx.db.quiz.findUnique({ where: { id: input.id } }),
+      ctx.db.quiz.findUnique({
+        where: { id: input.id },
+        include: { questions: true },
+      }),
     ),
 
   update: publicProcedure

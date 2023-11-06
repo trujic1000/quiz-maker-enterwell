@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
+import { CreateQuiz } from "~/app/_components/create-quiz";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
@@ -59,7 +59,7 @@ export default async function Home() {
 //         <p>You have no posts yet.</p>
 //       )}
 
-//       <CreatePost />
+//       <CreateQuiz />
 //     </div>
 //   );
 // }

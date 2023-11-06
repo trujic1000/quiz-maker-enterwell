@@ -1,4 +1,4 @@
-import { quizRouter } from "~/server/api/routers/post";
+import { quizRouter } from "~/server/api/routers/quiz";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**

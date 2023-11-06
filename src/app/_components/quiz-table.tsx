@@ -1,9 +1,11 @@
 "use client";
+import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Table } from "./table";
-import { Quiz } from "../page";
 import { api } from "~/trpc/react";
+import { Table } from "./table";
+import { Dialog, DialogTrigger, DialogContent } from "./dialog";
+import { Quiz } from "../page";
 
 const columns: ColumnDef<Quiz>[] = [
   // {
@@ -29,6 +31,7 @@ const columns: ColumnDef<Quiz>[] = [
 
 export const QuizTable = () => {
   const { data, isLoading, error } = api.quiz.getAll.useQuery();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   if (error) {
     console.error(`Something went wrong. Error message: ${error.message}`);
@@ -58,13 +61,19 @@ export const QuizTable = () => {
     <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">All Quizzes</h2>
-        <button
-          type="button"
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => console.log("Button clicked")}
-        >
-          Create new quiz
-        </button>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <button
+              type="button"
+              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            >
+              Create new quiz
+            </button>
+          </DialogTrigger>
+          <DialogContent title="Add new quiz">
+            <div>Test Test</div>
+          </DialogContent>
+        </Dialog>
       </div>
       <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
       <Table data={data} columns={columns} />

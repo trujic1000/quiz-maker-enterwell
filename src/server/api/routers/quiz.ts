@@ -3,14 +3,6 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const quizRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: publicProcedure
     .input(
       z.object({
@@ -30,7 +22,9 @@ export const quizRouter = createTRPCRouter({
       });
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => ctx.db.quiz.findMany()),
+  getAll: publicProcedure.query(({ ctx }) =>
+    ctx.db.quiz.findMany({ where: { isActive: true } }),
+  ),
 
   getById: publicProcedure
     .input(
@@ -38,9 +32,9 @@ export const quizRouter = createTRPCRouter({
         id: z.string(),
       }),
     )
-    .query(({ ctx, input }) => {
-      return ctx.db.quiz.findUnique({ where: { id: input.id } });
-    }),
+    .query(({ ctx, input }) =>
+      ctx.db.quiz.findUnique({ where: { id: input.id } }),
+    ),
 
   update: publicProcedure
     .input(

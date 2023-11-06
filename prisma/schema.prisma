@@ -6,15 +6,30 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Post {
+model Quiz {
     id        Int      @id @default(autoincrement())
-    name      String
+    title     String
+    isActive  Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    questions Question[]
+
+    @@index([title])
+}
+
+model Question {
+    id        Int      @id @default(autoincrement())
+    title     String
+    answer    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([name])
+    quizId    Int      
+    quiz      Quiz     @relation(fields: [quizId], references: [id])
+
+    @@index([quizId])
 }

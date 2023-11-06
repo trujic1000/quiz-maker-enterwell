@@ -9,6 +9,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   flexRender,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import { clsx } from "clsx";
@@ -43,6 +44,7 @@ export function Table<T extends object>({
     globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -100,7 +102,7 @@ export function Table<T extends object>({
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header, idx) => (
+                  {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={clsx(

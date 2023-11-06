@@ -5,18 +5,13 @@ import { Table } from "./table";
 import { Quiz } from "../page";
 
 const columns: ColumnDef<Quiz>[] = [
-  // {
-  //   accessorKey: "id",
-  //   header: "ID",
-  //   cell: (ctx) => ctx.getValue(),
-  // },
   {
     accessorKey: "title",
     header: "Title",
     cell: (ctx) => ctx.getValue(),
   },
   {
-    id: "numOfQuestions",
+    accessorFn: (row) => row.questions.length,
     header: "# of questions",
     cell: (ctx) => {
       const quiz = ctx.row.original;
@@ -34,7 +29,16 @@ export const QuizTable = () => {
       isActive: true,
       createdAt: new Date(),
       updatedAt: new Date(),
-      questions: [],
+      questions: [
+        {
+          id: "1",
+          title: "Who dis?",
+          answer: "John Doe",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          quizId: "1",
+        },
+      ],
     },
     {
       id: "2",
@@ -54,5 +58,35 @@ export const QuizTable = () => {
     },
   ];
 
-  return <Table data={data} columns={columns} />;
+  if (data.length === 0) {
+    return (
+      <div>
+        <p>No quizes available</p>
+        <button
+          type="button"
+          className="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => console.log("Button clicked")}
+        >
+          Create new quiz
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">All Quizzes</h2>
+        <button
+          type="button"
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={() => console.log("Button clicked")}
+        >
+          Create new quiz
+        </button>
+      </div>
+      <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
+      <Table data={data} columns={columns} />
+    </>
+  );
 };

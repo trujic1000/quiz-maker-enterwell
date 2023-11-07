@@ -25,8 +25,6 @@ export const Input = ({
   onChange,
   ...props
 }: InputProps) => {
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
-
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // If there's a registered onChange from react-hook-form
     if (register && typeof register(name).onChange === "function") {
@@ -61,21 +59,13 @@ export const Input = ({
           className={twMerge(
             clsx(
               "h-12 w-full rounded-2xl bg-gray-200 py-0",
-              "flex flex-row items-center gap-2",
+              "flex flex-row items-center gap-2 px-4",
               "hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-600",
               error && "border-2 border-red-700",
               className,
             ),
           )}
-          {...(register
-            ? {
-                ...register(name),
-                ref: (e: HTMLInputElement) => {
-                  inputRef.current = e;
-                  register(name).ref(e);
-                },
-              }
-            : {})}
+          {...(register ? { ...register(name) } : {})}
           onChange={handleOnChange}
           disabled={disabled}
           {...props}
@@ -87,7 +77,7 @@ export const Input = ({
 };
 
 export const ErrorMessage = ({ error }: { error: FieldError }) => (
-  <p className="absolute mt-2 block text-xs leading-6 text-red-700">
+  <p className="block text-xs leading-6 text-red-700">
     {error.type === "required" ? "This field is required" : error.message}
   </p>
 );

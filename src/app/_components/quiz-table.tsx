@@ -22,7 +22,6 @@ const columns: ColumnDef<Quiz>[] = [
 
 export const QuizTable = () => {
   const { data, isLoading, error } = api.quiz.getAll.useQuery();
-  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   if (error) {
     console.error(`Something went wrong. Error message: ${error.message}`);

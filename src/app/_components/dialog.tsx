@@ -30,7 +30,7 @@ export const DialogContent = React.forwardRef(
         onPointerDownOutside={onClose}
         className={twMerge(
           clsx(
-            "fixed left-1/2 top-1/2 w-[36rem] -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-2xl shadow-lg focus:outline-none",
+            "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-2xl shadow-lg focus:outline-none",
             className,
           ),
         )}

@@ -18,6 +18,12 @@ export const quizRouter = createTRPCRouter({
       return ctx.db.quiz.create({
         data: {
           title: input.title,
+          questions: {
+            create: input.questions?.map((question) => ({
+              title: question.title,
+              answer: question.answer,
+            })),
+          },
         },
       });
     }),

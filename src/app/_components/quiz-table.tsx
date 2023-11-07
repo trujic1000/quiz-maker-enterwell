@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 import { api } from "~/trpc/react";
 import { Table } from "./table";
-import { CreateQuiz } from "./create-quiz";
+import { CreateOrEditQuiz } from "./create-edit-quiz";
 import { type Quiz } from "../page";
 import { DeleteQuizDialog } from "./delete-quiz";
 
@@ -24,7 +24,7 @@ const columns: ColumnDef<Quiz>[] = [
     header: "Action",
     cell: ({ row }) => (
       <div className="flex gap-4">
-        <DeleteQuizDialog id={row.original.id} />
+        <CreateOrEditQuiz quiz={row.original} />
         <DeleteQuizDialog id={row.original.id} />
       </div>
     ),
@@ -47,7 +47,7 @@ export const QuizTable = () => {
     return (
       <div className="text-center">
         <p>No quizes available</p>
-        <CreateQuiz />
+        <CreateOrEditQuiz />
       </div>
     );
   }
@@ -56,7 +56,7 @@ export const QuizTable = () => {
     <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">All Quizzes</h2>
-        <CreateQuiz />
+        <CreateOrEditQuiz />
       </div>
       <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
       <Table data={data} columns={columns} />

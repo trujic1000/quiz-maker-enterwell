@@ -7,6 +7,7 @@ import { z } from "zod";
 import { api } from "~/trpc/react";
 import { Dialog, DialogTrigger, DialogContent } from "./dialog";
 import { Input } from "./input";
+import { type Quiz } from "../page";
 
 const DEFAULT_FORM = {
   title: "",
@@ -31,7 +32,11 @@ const createQuizSchema = z.object({
 
 type FormValues = z.infer<typeof createQuizSchema>;
 
-export function CreateQuiz() {
+type CreateOrEditQuizProps = {
+  quiz?: Quiz;
+};
+
+export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const {
     control,
@@ -41,13 +46,16 @@ export function CreateQuiz() {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(createQuizSchema),
-    defaultValues: DEFAULT_FORM,
   });
   const { append, fields, remove } = useFieldArray({
     control,
     name: "questions",
   });
   const utils = api.useUtils();
+
+  React.useEffect(() => {
+    reset(quiz ? quiz : DEFAULT_FORM);
+  }, [quiz]);
 
   const createQuiz = api.quiz.create.useMutation({
     onSuccess: () => {
@@ -62,9 +70,26 @@ export function CreateQuiz() {
       ),
   });
 
-  const onSubmit = handleSubmit(({ title, questions }) => {
-    createQuiz.mutate({ title, questions });
+  const editQuiz = api.quiz.update.useMutation({
+    onSuccess: () => {
+      console.log("Quiz successfully updated!");
+      setDialogOpen(false);
+      reset(quiz);
+      utils.quiz.getAll.refetch();
+    },
+    onError: (error) =>
+      console.error(
+        `Failed to create the quiz. Error message: ${error.message}`,
+      ),
   });
+
+  const onSubmit = handleSubmit(({ title, questions }) => {
+    quiz
+      ? editQuiz.mutate({ id: quiz.id, title, questions })
+      : createQuiz.mutate({ title, questions });
+  });
+
+  const isLoading = createQuiz.isLoading || editQuiz.isLoading;
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -73,10 +98,13 @@ export function CreateQuiz() {
           type="button"
           className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
         >
-          Create new quiz
+          {quiz ? "Edit" : "Create new quiz"}
         </button>
       </DialogTrigger>
-      <DialogContent title="Add new quiz" onClose={() => reset(DEFAULT_FORM)}>
+      <DialogContent
+        title="Add new quiz"
+        onClose={() => reset(quiz ? quiz : DEFAULT_FORM)}
+      >
         <form className="grid bg-white p-10 text-black" onSubmit={onSubmit}>
           <div>
             <Input
@@ -158,9 +186,9 @@ export function CreateQuiz() {
           <button
             type="submit"
             className="mt-4 rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            disabled={createQuiz.isLoading}
+            disabled={isLoading}
           >
-            {createQuiz.isLoading ? "Submitting..." : "Submit"}
+            {isLoading ? "Submitting..." : "Submit"}
           </button>
         </form>
       </DialogContent>

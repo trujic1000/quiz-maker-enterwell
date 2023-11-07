@@ -47,7 +47,7 @@ export const AlertContent = React.forwardRef(
             <AlertPrimitive.Action asChild>
               <button
                 type="button"
-                className="rounded border border-blue-500 bg-transparent px-4 py-2 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
+                className="rounded-full border border-blue-500 bg-transparent px-4 py-2 font-semibold text-blue-700 hover:border-transparent hover:bg-blue-500 hover:text-white"
                 onClick={onCancel}
               >
                 {cancelText}
@@ -55,7 +55,7 @@ export const AlertContent = React.forwardRef(
             </AlertPrimitive.Action>
             <button
               type="button"
-              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:bg-gray-400"
+              className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:bg-gray-400"
               onClick={onConfirm}
               disabled={isLoading}
             >

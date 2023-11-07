@@ -55,23 +55,52 @@ export const quizRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         title: z.string().optional(),
-        questions: z
-          .array(
-            z.object({ title: z.string().min(1), answer: z.string().min(1) }),
-          )
-          .optional(),
+        questions: z.array(
+          z.object({
+            id: z.string().optional(),
+            title: z.string().min(1),
+            answer: z.string().min(1),
+          }),
+        ),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.quiz.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          title: input.title ?? undefined,
-        },
+      const transaction = await ctx.db.$transaction(async (prisma) => {
+        if (input.title) {
+          await prisma.quiz.update({
+            where: { id: input.id },
+            data: { title: input.title },
+          });
+        }
+
+        // Delete existing questions for the quiz
+        await prisma.question.deleteMany({
+          where: { quizId: input.id },
+        });
+
+        // Recreate questions based on the input
+        const questionsCreation =
+          input.questions.map((question) => {
+            return prisma.question.create({
+              data: {
+                title: question.title,
+                answer: question.answer,
+                quizId: input.id,
+              },
+            });
+          }) || [];
+
+        // Execute question creation in parallel
+        await Promise.all(questionsCreation);
+
+        // Return the updated quiz
+        return prisma.quiz.findUnique({
+          where: { id: input.id },
+          include: { questions: true },
+        });
       });
-      // TODO: update questions
+
+      return transaction;
     }),
 
   softDelete: publicProcedure

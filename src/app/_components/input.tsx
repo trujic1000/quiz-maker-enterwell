@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React from "react";
 import { type FieldError, type UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";

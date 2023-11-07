@@ -90,4 +90,6 @@ export const quizRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.quiz.delete({ where: { id: input.id } });
     }),
+
+  getQuestions: publicProcedure.query(({ ctx }) => ctx.db.question.findMany()),
 });

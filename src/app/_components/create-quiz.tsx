@@ -76,11 +76,7 @@ export function CreateQuiz() {
           Create new quiz
         </button>
       </DialogTrigger>
-      <DialogContent
-        title="Add new quiz"
-        className="w-[42rem]"
-        onClose={() => reset(DEFAULT_FORM)}
-      >
+      <DialogContent title="Add new quiz" onClose={() => reset(DEFAULT_FORM)}>
         <form className="grid bg-white p-10 text-black" onSubmit={onSubmit}>
           <div>
             <Input
@@ -95,7 +91,10 @@ export function CreateQuiz() {
           </div>
           <div className="-mr-10 max-h-[30rem] overflow-y-auto pr-10">
             {fields.map((question, index) => (
-              <div key={question.id} className="flex items-center gap-6 py-2">
+              <div
+                key={question.id}
+                className="relative flex flex-col items-center gap-6 py-2 lg:flex-row"
+              >
                 <Input
                   register={register}
                   name={`questions.${index}.title`}
@@ -116,7 +115,7 @@ export function CreateQuiz() {
                 />
                 <button
                   type="button"
-                  className="pt-8"
+                  className="absolute right-0 top-4 lg:relative lg:top-0 lg:pt-8"
                   onClick={() => {
                     if (fields.length > 1) {
                       remove(index);

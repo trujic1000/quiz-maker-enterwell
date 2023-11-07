@@ -1,3 +1,4 @@
+"use client";
 import React, { type ForwardedRef } from "react";
 import * as AlertPrimitive from "@radix-ui/react-alert-dialog";
 import { clsx } from "clsx";

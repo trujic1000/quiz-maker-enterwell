@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import type { ColumnDef, Row } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import { api } from "~/trpc/react";
 import { Table } from "./table";
 import { CreateQuiz } from "./create-quiz";
 import { type Quiz } from "../page";
-import { Alert, AlertContent, AlertTrigger } from "./alert";
+import { DeleteQuizDialog } from "./delete-quiz";
 
 const columns: ColumnDef<Quiz>[] = [
   {
@@ -22,7 +22,12 @@ const columns: ColumnDef<Quiz>[] = [
   {
     id: "action",
     header: "Action",
-    cell: ({ row }) => <QuizTableActionRow row={row} />,
+    cell: ({ row }) => (
+      <div className="flex gap-4">
+        <DeleteQuizDialog id={row.original.id} />
+        <DeleteQuizDialog id={row.original.id} />
+      </div>
+    ),
   },
 ];
 
@@ -42,13 +47,7 @@ export const QuizTable = () => {
     return (
       <div className="text-center">
         <p>No quizes available</p>
-        <button
-          type="button"
-          className="mt-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => console.log("Button clicked")}
-        >
-          Create new quiz
-        </button>
+        <CreateQuiz />
       </div>
     );
   }
@@ -62,48 +61,5 @@ export const QuizTable = () => {
       <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
       <Table data={data} columns={columns} />
     </>
-  );
-};
-
-type QuizTableActionRowProps = {
-  row: Row<Quiz>;
-};
-
-const QuizTableActionRow = ({ row }: QuizTableActionRowProps) => {
-  const [alertOpen, setAlertOpen] = React.useState(false);
-  const utils = api.useUtils();
-
-  const deleteQuizMutation = api.quiz.softDelete.useMutation({
-    onSuccess: () => {
-      console.log("Quiz successfully deleted");
-      setAlertOpen(false);
-      utils.quiz.getAll.refetch();
-    },
-    onError: (error) =>
-      console.error(
-        `Failed to delete the quiz. Error message: ${error.message}`,
-      ),
-  });
-
-  return (
-    <Alert open={alertOpen} onOpenChange={setAlertOpen}>
-      <AlertTrigger className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-        Delete
-      </AlertTrigger>
-      <AlertContent
-        title="Delete quiz"
-        onCancel={() => setAlertOpen(false)}
-        confirmText="Delete"
-        onConfirm={() => deleteQuizMutation.mutate({ id: row.original.id })}
-        isLoading={deleteQuizMutation.isLoading}
-      >
-        <span className="text-neutral-10 mb-2 block text-[1.375rem] font-bold leading-normal">
-          Wait a minute!
-        </span>
-        <p className="font-inter text-neutral-8 font-semibold leading-loose">
-          Are you sure you want to delete this quiz?
-        </p>
-      </AlertContent>
-    </Alert>
   );
 };

@@ -51,11 +51,15 @@ export function CreateQuiz() {
 
   const createQuiz = api.quiz.create.useMutation({
     onSuccess: () => {
-      console.log("Success!!");
+      console.log("Quiz successfully created!");
       setDialogOpen(false);
       reset(DEFAULT_FORM);
       utils.quiz.getAll.refetch();
     },
+    onError: (error) =>
+      console.error(
+        `Failed to create the quiz. Error message: ${error.message}`,
+      ),
   });
 
   const onSubmit = handleSubmit(({ title, questions }) => {

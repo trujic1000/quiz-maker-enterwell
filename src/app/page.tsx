@@ -6,17 +6,13 @@ export type Quiz = QuizModel & {
   questions: Question[];
 };
 
-export default async function Home() {
+export default function Home() {
   return (
-    <main className="text-black">
-      <div className="px-14 py-10">
-        <div className="container mx-auto">
-          <h1 className="mb-12 text-center text-4xl font-extrabold tracking-tight sm:text-[5rem]">
-            Quiz Maker
-          </h1>
-          <QuizTable />
-        </div>
-      </div>
-    </main>
+    <>
+      <h1 className="mb-12 text-center text-4xl font-extrabold leading-normal tracking-tight sm:text-[5rem]">
+        Quiz Maker
+      </h1>
+      <QuizTable />
+    </>
   );
 }

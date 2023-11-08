@@ -7,6 +7,7 @@ import { Table } from "./table";
 import { CreateOrEditQuiz } from "./create-edit-quiz";
 import { type Quiz } from "../page";
 import { DeleteQuizDialog } from "./delete-quiz";
+import Link from "next/link";
 
 const columns: ColumnDef<Quiz>[] = [
   {
@@ -24,6 +25,12 @@ const columns: ColumnDef<Quiz>[] = [
     header: "Action",
     cell: ({ row }) => (
       <div className="flex gap-4">
+        <Link
+          href={`/quiz/${row.original.id}`}
+          className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        >
+          Preview
+        </Link>
         <CreateOrEditQuiz quiz={row.original} />
         <DeleteQuizDialog id={row.original.id} />
       </div>

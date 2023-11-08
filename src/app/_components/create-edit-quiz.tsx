@@ -180,7 +180,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
               className="mt-2 rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
               onClick={() => append({ title: "", answer: "" })}
             >
-              Add new question
+              Add new
             </button>
           </div>
           <button

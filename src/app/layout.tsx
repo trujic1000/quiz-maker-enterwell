@@ -33,7 +33,11 @@ export default function RootLayout({
               </Link>
             </nav>
           </div>
-          {children}
+          <main className="text-black">
+            <div className="px-14 py-10">
+              <div className="container mx-auto">{children}</div>
+            </div>
+          </main>
         </TRPCReactProvider>
       </body>
     </html>

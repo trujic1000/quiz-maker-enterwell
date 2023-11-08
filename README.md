@@ -1,28 +1,43 @@
-# Create T3 App
+# Quiz Maker
+
+Quiz Maker is a Next.js application designed to manage the creation of pub quizzes.
+
+## Tech stack
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+If you are not familiar with the different technologies used in this project, please refer to the respective docs.
 
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+## Getting Started
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+To start using Quiz Maker, follow the steps below:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. Clone the project repository to your local machine:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```bash
+git clone https://github.com/trujic1000/quiz-maker-enterwell.git
+```
 
-## How do I deploy this?
+2. Install the project dependencies by running the following command:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+npm install
+```
+
+3. Set up the environment variables:
+
+- Create a new file named .env in the root directory of the project.
+- Copy the contents of the .env.example file into the newly created .env file.
+- NOTE: DATABASE_URL is included in .env.example for the purpose of testing the application. In production, .env.example would only have a placeholder value
+- Start the development server:
+
+```
+npm run dev
+```
+
+The Quiz Maker application will now be accessible locally at http://localhost:3000.

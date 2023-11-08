@@ -26,7 +26,7 @@ export const DeleteQuizDialog = ({ id }: DeleteQuizDialogProps) => {
 
   return (
     <Alert open={alertOpen} onOpenChange={setAlertOpen}>
-      <AlertTrigger className="btn btn-primary">Delete</AlertTrigger>
+      <AlertTrigger className="btn btn-danger">Delete</AlertTrigger>
       <AlertContent
         title="Delete quiz"
         onCancel={() => setAlertOpen(false)}

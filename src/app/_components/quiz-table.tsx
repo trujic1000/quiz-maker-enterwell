@@ -25,7 +25,7 @@ const columns: ColumnDef<Quiz>[] = [
     header: "Action",
     cell: ({ row }) => (
       <div className="flex gap-4">
-        <Link href={`/quiz/${row.original.id}`} className="btn btn-primary">
+        <Link href={`/quiz/${row.original.id}`} className="btn btn-secondary">
           Preview
         </Link>
         <CreateOrEditQuiz quiz={row.original} />

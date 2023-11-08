@@ -55,7 +55,7 @@ export const AlertContent = React.forwardRef(
             </AlertPrimitive.Action>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-danger"
               onClick={onConfirm}
               disabled={isLoading}
             >

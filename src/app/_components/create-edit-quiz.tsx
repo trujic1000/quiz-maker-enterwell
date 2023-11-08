@@ -247,16 +247,20 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
           className="w-[36rem]"
         >
           <div className="grid gap-10 bg-white p-10 text-black">
-            <CheckboxGroup
-              control={control}
-              name="selectedQuestionIds"
-              label="All questions"
-              options={checkboxesOptions || []}
-              className="-mr-10 max-h-[23rem] overflow-y-auto pr-10"
-              onChange={(selectedQuestionIds) =>
-                setSelectedQuestionIds(selectedQuestionIds)
-              }
-            />
+            {!!checkboxesOptions?.length ? (
+              <CheckboxGroup
+                control={control}
+                name="selectedQuestionIds"
+                label="All questions"
+                options={checkboxesOptions || []}
+                className="-mr-10 max-h-[23rem] overflow-y-auto pr-10"
+                onChange={(selectedQuestionIds) =>
+                  setSelectedQuestionIds(selectedQuestionIds)
+                }
+              />
+            ) : (
+              <p>No questions to insert</p>
+            )}
             <div className="flex justify-between">
               <button
                 type="button"
@@ -272,6 +276,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
                 type="button"
                 className="btn btn-primary"
                 onClick={insertQuestions}
+                disabled={!checkboxesOptions?.length}
               >
                 Insert
               </button>

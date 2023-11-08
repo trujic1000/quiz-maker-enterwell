@@ -94,10 +94,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        >
+        <button type="button" className="btn btn-primary">
           {quiz ? "Edit" : "Create new quiz"}
         </button>
       </DialogTrigger>

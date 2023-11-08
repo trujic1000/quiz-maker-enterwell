@@ -25,10 +25,7 @@ const columns: ColumnDef<Quiz>[] = [
     header: "Action",
     cell: ({ row }) => (
       <div className="flex gap-4">
-        <Link
-          href={`/quiz/${row.original.id}`}
-          className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        >
+        <Link href={`/quiz/${row.original.id}`} className="btn btn-primary">
           Preview
         </Link>
         <CreateOrEditQuiz quiz={row.original} />

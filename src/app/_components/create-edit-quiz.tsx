@@ -101,6 +101,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
       setDialogOpen(false);
       reset(DEFAULT_FORM);
       void utils.quiz.getAll.refetch();
+      void utils.quiz.getQuestions.refetch();
     },
     onError: (error) =>
       console.error(
@@ -114,6 +115,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
       setDialogOpen(false);
       reset(quiz);
       void utils.quiz.getAll.refetch();
+      void utils.quiz.getQuestions.refetch();
     },
     onError: (error) =>
       console.error(

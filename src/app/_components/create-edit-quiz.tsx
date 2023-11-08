@@ -65,7 +65,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
 
   React.useEffect(() => {
     reset(quiz ? quiz : DEFAULT_FORM);
-  }, [quiz]);
+  }, [quiz, reset]);
 
   const { data: allQuestions } = api.quiz.getQuestions.useQuery();
 
@@ -100,7 +100,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
       console.log("Quiz successfully created!");
       setDialogOpen(false);
       reset(DEFAULT_FORM);
-      utils.quiz.getAll.refetch();
+      void utils.quiz.getAll.refetch();
     },
     onError: (error) =>
       console.error(
@@ -113,7 +113,7 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
       console.log("Quiz successfully updated!");
       setDialogOpen(false);
       reset(quiz);
-      utils.quiz.getAll.refetch();
+      void utils.quiz.getAll.refetch();
     },
     onError: (error) =>
       console.error(

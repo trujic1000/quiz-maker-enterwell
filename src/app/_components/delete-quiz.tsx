@@ -16,7 +16,7 @@ export const DeleteQuizDialog = ({ id }: DeleteQuizDialogProps) => {
     onSuccess: () => {
       console.log("Quiz successfully deleted");
       setAlertOpen(false);
-      utils.quiz.getAll.refetch();
+      void utils.quiz.getAll.refetch();
     },
     onError: (error) =>
       console.error(

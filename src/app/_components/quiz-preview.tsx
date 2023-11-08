@@ -25,7 +25,7 @@ export const QuizPreview = ({ quiz }: QuizPreviewProps) => {
       emblaApi.on("select", onSelect);
     }
     return removeOnSelectListener;
-  }, [emblaApi]);
+  }, [emblaApi, onSelect, removeOnSelectListener]);
 
   return (
     <>

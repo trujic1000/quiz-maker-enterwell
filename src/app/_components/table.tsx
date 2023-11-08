@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -211,6 +212,7 @@ export function Table<T extends object>({
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const itemRank = rankItem(row.getValue(columnId), value);
 
   // Store the itemRank info

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
@@ -70,7 +71,7 @@ const CheckboxGroupItem = React.forwardRef<any, ItemProps>(
               index,
             ) => (
               <div
-                key={`${index}_${label || ""}`}
+                key={`${index}_${label ?? ""}`}
                 className="flex items-center gap-4"
               >
                 <CheckboxPrimitive.Root

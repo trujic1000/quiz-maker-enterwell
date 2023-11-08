@@ -8,6 +8,12 @@ import { api } from "~/trpc/react";
 import { Dialog, DialogTrigger, DialogContent } from "./dialog";
 import { Input } from "./input";
 import { type Quiz } from "../page";
+import { CheckboxGroup } from "./checkbox-group";
+
+const DIALOG_STEP = {
+  EDIT_QUIZ: "EDIT_QUIZ",
+  INSERT_QUESTIONS: "INSERT_QUESTIONS",
+};
 
 const DEFAULT_FORM = {
   title: "",
@@ -38,6 +44,10 @@ type CreateOrEditQuizProps = {
 
 export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogStep, setDialogStep] = React.useState(DIALOG_STEP.EDIT_QUIZ);
+  const [selectedQuestionIds, setSelectedQuestionIds] = React.useState<
+    string[]
+  >([]);
   const {
     control,
     handleSubmit,
@@ -56,6 +66,34 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
   React.useEffect(() => {
     reset(quiz ? quiz : DEFAULT_FORM);
   }, [quiz]);
+
+  const { data: allQuestions } = api.quiz.getQuestions.useQuery();
+
+  const checkboxesOptions = allQuestions
+    ?.filter(
+      (question) => !quiz?.questions.find((q) => q.title === question.title),
+    )
+    .map((question) => ({
+      label: question.title,
+      value: question.id,
+    }));
+
+  const insertQuestions = () => {
+    const questionMap = new Map(allQuestions?.map((q) => [q.id, q]));
+
+    const filteredQuestions = selectedQuestionIds.map((id) =>
+      questionMap.get(id),
+    );
+
+    const questionsToInsert = filteredQuestions.map((question) => ({
+      title: question?.title ?? "",
+      answer: question?.answer ?? "",
+    }));
+
+    append(questionsToInsert);
+    setSelectedQuestionIds([]);
+    setDialogStep(DIALOG_STEP.EDIT_QUIZ);
+  };
 
   const createQuiz = api.quiz.create.useMutation({
     onSuccess: () => {
@@ -98,97 +136,149 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
           {quiz ? "Edit" : "Create new quiz"}
         </button>
       </DialogTrigger>
-      <DialogContent
-        title="Add new quiz"
-        onClose={() => reset(quiz ? quiz : DEFAULT_FORM)}
-      >
-        <form className="grid bg-white p-10 text-black" onSubmit={onSubmit}>
-          <div>
-            <Input
-              register={register}
-              name="title"
-              label="Quiz title"
-              placeholder="Enter quiz title"
-              required
-              error={errors.title}
-            />
-            <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
-          </div>
-          <div className="-mr-10 max-h-[30rem] overflow-y-auto pr-10">
-            {fields.map((question, index) => (
-              <div
-                key={question.id}
-                className="relative flex flex-col items-center gap-6 py-2 lg:flex-row"
-              >
-                <Input
-                  register={register}
-                  name={`questions.${index}.title`}
-                  label={`${index + 1}. Question`}
-                  placeholder="Enter question title"
-                  fieldsetClassName="flex-1"
-                  required
-                  error={errors.questions?.[index]?.title}
-                />
-                <Input
-                  register={register}
-                  name={`questions.${index}.answer`}
-                  label="Answer"
-                  placeholder="Enter answer"
-                  fieldsetClassName="flex-1"
-                  required
-                  error={errors.questions?.[index]?.answer}
-                />
-                <button
-                  type="button"
-                  className="absolute right-0 top-4 lg:relative lg:top-0 lg:pt-8"
-                  onClick={() => {
-                    if (fields.length > 1) {
-                      remove(index);
-                    }
-                  }}
+      {dialogStep === DIALOG_STEP.EDIT_QUIZ && (
+        <DialogContent
+          title="Add new quiz"
+          onClose={() => reset(quiz ? quiz : DEFAULT_FORM)}
+          className="w-[42rem]"
+        >
+          <form className="grid bg-white p-10 text-black" onSubmit={onSubmit}>
+            <div>
+              <Input
+                register={register}
+                name="title"
+                label="Quiz title"
+                placeholder="Enter quiz title"
+                required
+                error={errors.title}
+              />
+              <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
+            </div>
+            <div className="-mr-10 max-h-[30rem] overflow-y-auto pr-10">
+              {fields.map((question, index) => (
+                <div
+                  key={question.id}
+                  className="relative flex flex-col items-center gap-6 py-2 lg:flex-row"
                 >
-                  <svg
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <Input
+                    register={register}
+                    name={`questions.${index}.title`}
+                    label={`${index + 1}. Question`}
+                    placeholder="Enter question title"
+                    fieldsetClassName="flex-1"
+                    required
+                    error={errors.questions?.[index]?.title}
+                  />
+                  <Input
+                    register={register}
+                    name={`questions.${index}.answer`}
+                    label="Answer"
+                    placeholder="Enter answer"
+                    fieldsetClassName="flex-1"
+                    required
+                    error={errors.questions?.[index]?.answer}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-0 top-4 lg:relative lg:top-0 lg:pt-8"
+                    onClick={() => {
+                      if (fields.length > 1) {
+                        remove(index);
+                      }
+                    }}
                   >
-                    <path
-                      d="M18 6L6 18"
-                      stroke="#000"
-                      strokeWidth="2.25"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M6 6L18 18"
-                      stroke="#000"
-                      strokeWidth="2.25"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
+                    <svg
+                      width={16}
+                      height={16}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M18 6L6 18"
+                        stroke="#000"
+                        strokeWidth="2.25"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M6 6L18 18"
+                        stroke="#000"
+                        strokeWidth="2.25"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="btn btn-secondary mt-4"
+                onClick={() => append({ title: "", answer: "" })}
+              >
+                Add new
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary ml-4 mt-4"
+                onClick={() => setDialogStep(DIALOG_STEP.INSERT_QUESTIONS)}
+              >
+                Insert Questions
+              </button>
+            </div>
             <button
-              type="button"
-              className="mt-2 rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-              onClick={() => append({ title: "", answer: "" })}
+              type="submit"
+              className="btn btn-primary mt-4"
+              disabled={isLoading}
             >
-              Add new
+              {isLoading ? "Submitting..." : "Submit"}
             </button>
+          </form>
+        </DialogContent>
+      )}
+      {dialogStep === DIALOG_STEP.INSERT_QUESTIONS && (
+        <DialogContent
+          title="Insert questions"
+          onClose={() => {
+            reset(quiz ? quiz : DEFAULT_FORM);
+            setDialogStep(DIALOG_STEP.EDIT_QUIZ);
+          }}
+          className="w-[36rem]"
+        >
+          <div className="grid gap-10 bg-white p-10 text-black">
+            <CheckboxGroup
+              control={control}
+              name="selectedQuestionIds"
+              label="All questions"
+              options={checkboxesOptions || []}
+              className="-mr-10 max-h-[23rem] overflow-y-auto pr-10"
+              onChange={(selectedQuestionIds) =>
+                setSelectedQuestionIds(selectedQuestionIds)
+              }
+            />
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setSelectedQuestionIds([]);
+                  setDialogStep(DIALOG_STEP.EDIT_QUIZ);
+                }}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={insertQuestions}
+              >
+                Insert
+              </button>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="mt-4 rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            disabled={isLoading}
-          >
-            {isLoading ? "Submitting..." : "Submit"}
-          </button>
-        </form>
-      </DialogContent>
+        </DialogContent>
+      )}
     </Dialog>
   );
 }

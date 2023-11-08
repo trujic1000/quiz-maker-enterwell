@@ -120,5 +120,7 @@ export const quizRouter = createTRPCRouter({
       return ctx.db.quiz.delete({ where: { id: input.id } });
     }),
 
-  getQuestions: publicProcedure.query(({ ctx }) => ctx.db.question.findMany()),
+  getQuestions: publicProcedure.query(({ ctx }) =>
+    ctx.db.question.findMany({ distinct: "title" }),
+  ),
 });

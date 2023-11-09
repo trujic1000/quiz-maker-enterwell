@@ -34,14 +34,8 @@ export const QuizPreview = ({ quiz }: QuizPreviewProps) => {
         ref={emblaRef}
       >
         <div className="flex">
-          {quiz.questions.map((question, index) => (
-            <div
-              key={question.id}
-              className="relative min-w-0 flex-[0_0_100%] px-10"
-            >
-              <span className="absolute right-10 top-0 grid h-10 w-10 place-items-center rounded-full bg-white text-black">
-                {index + 1}
-              </span>
+          {quiz.questions.map((question) => (
+            <div key={question.id} className="min-w-0 flex-[0_0_100%] px-10">
               <p className="text-xl font-bold">Question:</p>
               <p>{question.title}</p>
               <p className="mt-4 text-xl font-bold">Answer:</p>

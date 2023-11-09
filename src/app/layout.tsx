@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <div className="px-14 py-4">
+          <div className="px-4 py-4 sm:px-14">
             <nav className="container mx-auto flex items-center">
               <Link href="/" className="text-3xl font-bold">
                 Quiz Maker
@@ -34,7 +34,7 @@ export default function RootLayout({
             </nav>
           </div>
           <main className="text-black">
-            <div className="px-14 py-10">
+            <div className="px-4 py-10 sm:px-14">
               <div className="container mx-auto">{children}</div>
             </div>
           </main>

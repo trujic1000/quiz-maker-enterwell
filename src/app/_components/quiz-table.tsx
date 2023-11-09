@@ -24,7 +24,7 @@ const columns: ColumnDef<Quiz>[] = [
     id: "action",
     header: "Action",
     cell: ({ row }) => (
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         <Link href={`/quiz/${row.original.id}`} className="btn btn-secondary">
           Preview
         </Link>
@@ -57,13 +57,13 @@ export const QuizTable = () => {
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">All Quizzes</h2>
         <CreateOrEditQuiz />
       </div>
       <hr className="mb-6 mt-3 h-0.5 w-full border-0 bg-gray-900" />
       <Table data={data} columns={columns} />
-    </>
+    </div>
   );
 };

@@ -67,7 +67,9 @@ export function CreateOrEditQuiz({ quiz }: CreateOrEditQuizProps) {
     reset(quiz ? quiz : DEFAULT_FORM);
   }, [quiz, reset]);
 
-  const { data: allQuestions } = api.quiz.getQuestions.useQuery();
+  const { data: allQuestions } = api.quiz.getQuestions.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
   const checkboxesOptions = allQuestions
     ?.filter(
